@@ -3,7 +3,8 @@ PlayersList = new Mongo.Collection('players');
 
 Template.leaderboard.helpers({
     'player':function(){
-        return PlayersList.find();
+        //return PlayersList.find();
+        return PlayersList.find({}, {sort: {score: -1, name: 1}})
     },
     'otherHelperFunction':function(){
         return "Some other function"
@@ -16,7 +17,12 @@ Template.leaderboard.helpers({
         if(playerId == selectedPlayer){
             return "selected"
         }
+    },
+    'showSelectedPlayer': function(){
+        var selectedPlayer = Session.get('selectedPlayer');
+        return PlayersList.findOne(selectedPlayer);
     }
+
 });
 
 Template.leaderboard.events({
@@ -32,8 +38,28 @@ Template.leaderboard.events({
     },
     'click .increment': function(){
         var selectedPlayer = Session.get('selectedPlayer');
-        PlayersList.update('selectedPlayer', {score: 5});
+        PlayersList.update(selectedPlayer, {$inc: {score: 5}});
+    },
+    'click .decrement': function(){
+        var selectedPlayer = Session.get('selectedPlayer');
+        PlayersList.update(selectedPlayer, {$inc: {score: -5}})
+    },
+    'click .remove': function(){
+        var selectedPlayer = Session.get('selectedPlayer');
+        PlayersList.remove(selectedPlayer);
     }
+});
+
+Template.addPlayerForm.events({
+   'submit form': function(event){
+       event.preventDefault();
+       var playerNameVar = event.target.playerName.value;
+       console.log(playerNameVar);
+       PlayersList.insert({
+           name: playerNameVar,
+           score: 0
+       });
+   } 
 });
 /*
 Template.leaderboard.player = function(){
