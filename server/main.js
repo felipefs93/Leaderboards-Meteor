@@ -26,6 +26,10 @@ Meteor.startup(() => {
         'removePlayerData': function(selectedPlayer){
             var currentUserId = Meteor.userId();
             PlayersList.remove({_id: selectedPlayer, createdBy: currentUserId});
+        },
+        'modifyPlayerScore': function(selectedPlayer, scoreValue){
+            var currentUserId = Meteor.userId();
+            PlayersList.update({_id: selectedPlayer, createdBy: currentUserId}, {$inc: {score: scoreValue}});
         }
     });
 

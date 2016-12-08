@@ -42,11 +42,13 @@ Template.leaderboard.events({
     },
     'click .increment': function(){
         var selectedPlayer = Session.get('selectedPlayer');
-        PlayersList.update(selectedPlayer, {$inc: {score: 5}});
+        //PlayersList.update(selectedPlayer, {$inc: {score: 5}});
+        Meteor.call('modifyPlayerScore', selectedPlayer, 5);
     },
     'click .decrement': function(){
         var selectedPlayer = Session.get('selectedPlayer');
-        PlayersList.update(selectedPlayer, {$inc: {score: -5}})
+        //PlayersList.update(selectedPlayer, {$inc: {score: -5}})
+        Meteor.call('modifyPlayerScore', selectedPlayer, -5);
     },
     'click .remove': function(){
         var selectedPlayer = Session.get('selectedPlayer');
