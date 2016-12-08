@@ -50,7 +50,9 @@ Template.leaderboard.events({
     },
     'click .remove': function(){
         var selectedPlayer = Session.get('selectedPlayer');
-        PlayersList.remove(selectedPlayer);
+        //PlayersList.remove(selectedPlayer);
+        //console.log(selectedPlayer);
+        Meteor.call('removePlayerData', selectedPlayer);
     }
 });
 
@@ -58,13 +60,7 @@ Template.addPlayerForm.events({
    'submit form': function(event){
        event.preventDefault();
        var playerNameVar = event.target.playerName.value;
-       var currentUserId = Meteor.userId();
-       console.log(playerNameVar);
-       PlayersList.insert({
-           name: playerNameVar,
-           score: 0,
-           createdBy: currentUserId
-       });
+       Meteor.call('insertPlayerData', playerNameVar);
    } 
 });
 /*
